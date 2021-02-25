@@ -15,6 +15,7 @@ namespace DisposeExample
         }
     }
 
+
     public class BinarySerialization
     {
         public static byte[] Serialize(object o, bool useCompression)
@@ -22,7 +23,7 @@ namespace DisposeExample
             MemoryStream ms = new MemoryStream();
             try
             {
-                new BinaryFormatter().Serialize((Stream) ms, o);
+                new BinaryFormatter().Serialize((Stream)ms, o);
                 return useCompression ? BinarySerialization.Compress(ms) : ms.GetBuffer();
             }
             catch (Exception e)
@@ -32,7 +33,7 @@ namespace DisposeExample
             }
             finally
             {
-                ms?.Close();
+               // ms?.Close();
             }
         }
 
@@ -48,7 +49,7 @@ namespace DisposeExample
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 ms.Write(data, 0, data.Length);
                 ms.Position = 0L;
-                return binaryFormatter.Deserialize((Stream) ms);
+                return binaryFormatter.Deserialize((Stream)ms);
             }
             catch (Exception e)
             {
@@ -61,14 +62,27 @@ namespace DisposeExample
             }
         }
 
-        private static byte[] Decompress(byte[] data)
+        public static byte[] Decompress(byte[] data)
         {
             throw new NotImplementedException();
         }
 
-        private static byte[] Compress(MemoryStream ms)
+        public static byte[] Compress(MemoryStream ms)
         {
             throw new NotImplementedException();
         }
+    }
+
+
+    public class OhNo
+    {
+        public void ReadDataAtBytePosition(long bytePosition)
+        {
+            using (FileStream stream = new FileStream("test.txt", FileMode.Open) {Position = bytePosition})
+            {
+                int byteValue = stream.ReadByte();
+            }
+        }
+
     }
 }
